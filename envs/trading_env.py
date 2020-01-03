@@ -110,9 +110,9 @@ class TradingEnv(gym.Env):
         else:
             order_type = MarketOrderTypes.BUY
 
-        unit_count = int(self.wallet_amount * 0.10)
+        unit_count = int(self.wallet_amount / self.target_history[self.curr_step] * 0.1)
         if not unit_count:
-            logging.info('wallet empy')
+            logging.info('not enough money')
             return -2000
 
         profit =  MarketOrder(
@@ -126,7 +126,7 @@ class TradingEnv(gym.Env):
         self.wallet_amount += profit
 
         if self.wallet_amount <= 0:
-            logging.info('wallet empy')
+            logging.info('wallet is empty')
             return -2000
 
         return profit / unit_count
