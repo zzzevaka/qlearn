@@ -92,7 +92,7 @@ class TradingEnv(gym.Env):
         reward = self._calc_reward(action)
         self.curr_step += 1
         logging.debug(
-            f'step: {self.curr_step}, reward: {reward}, amount: {self.wallet_amount}'
+            f'step: {self.curr_step}/{self.n_step}, reward: {reward}, amount: {self.wallet_amount}'
         )
         if self.curr_step == self.n_step or self.wallet_amount <= 0:
             done = True
