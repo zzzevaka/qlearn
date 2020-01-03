@@ -92,7 +92,7 @@ class TradingEnv(gym.Env):
         reward = self._calc_reward(action)
         self.curr_step += 1
         logging.debug(
-            f'step: {self.curr_step}/{self.n_step}, reward: {reward}, amount: {self.wallet_amount}'
+            f'step: {self.curr_step}/{self.n_step}, action: {action}, reward: {reward}, amount: {self.wallet_amount}'
         )
         if self.curr_step == self.n_step or self.wallet_amount <= 0:
             done = True
@@ -111,10 +111,13 @@ class TradingEnv(gym.Env):
             order_type = MarketOrderTypes.BUY
 
         unit_count = int(self.wallet_amount * 0.10)
+        if not unit_count:
+            logging.info('wallet empy')
+            return -2000
 
         profit =  MarketOrder(
             order_type=order_type,
-            unit_count=int(self.wallet_amount * 0.10),
+            unit_count=unit_count,
             values=self.target_history[self.curr_step:],
             close_diff_threshold=self.order_close_threshold,
             tax=self.order_tax,
